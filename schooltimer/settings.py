@@ -122,7 +122,7 @@ STATIC_URL = '/static/'
 
 # مجلد static الرئيسي
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',
+ BASE_DIR / 'timetable' / 'static',
 ]
 
 # عند التحزيم (collectstatic)
