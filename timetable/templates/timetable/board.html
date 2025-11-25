@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مؤقّت الحصص الدراسية</title>
+
+    <link rel="stylesheet" href="/static/timetable/css/board.css">
+    <script defer src="/static/timetable/js/board.js"></script>
+</head>
+
+<body id="app-body">
+
+    <!-- ========== العنوان أعلى يمين ========== -->
+    <div class="header-top">
+        <h1>مؤقّت الحصص الدراسية</h1>
+        <h2 id="school-name">الثانوية الثالثة عشر بعرعر</h2>
+    </div>
+
+    <!-- ========== الهيكل العام ========== -->
+    <div class="layout">
+
+        <!-- العمود الأيمن (الدائرة + التاريخ) -->
+        <div class="center-box glass neon">
+
+            <div class="inner">
+
+                <!-- الدائرة الكبيرة -->
+                <div class="big-circle">
+                    <svg class="big-svg">
+                        <circle cx="210" cy="210" r="165" id="circle-bg"></circle>
+                        <circle cx="210" cy="210" r="165" id="circle-progress"></circle>
+                    </svg>
+
+                    <div class="circle-text">
+                        <div id="current-lesson" class="lesson-now">—</div>
+                        <div id="lesson-timer" class="lesson-timer">--:--</div>
+                        <div id="next-lesson" class="lesson-next">—</div>
+                    </div>
+                </div>
+
+                <!-- مربع التاريخ -->
+                <div class="date-box glass neon">
+                    <div class="date-row">
+                        <span class="date-label">التاريخ الميلادي</span>
+                        <span class="date-value">{{ today_m }}</span>
+                    </div>
+
+                    <div class="line"></div>
+
+                    <div class="date-row">
+                        <span class="date-label yellow">التاريخ الهجري</span>
+                        <span class="date-value">{{ today_h }}</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- العمود الأيسر (الساعة + الصلاة) -->
+        <div class="left-box glass neon">
+
+            <div class="small-circle">
+                <div id="live-time" class="time-digital">--:--:--</div>
+                <div class="label-small">الوقت الآن</div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="prayer-box">
+                <h3 class="prayer-title">وقت صلاة الظهر</h3>
+
+                <div id="prayer-time" class="prayer-time">{{ dhuhr }}</div>
+
+                <div id="prayer-countdown" class="prayer-timer">--:--:--</div>
+                <div class="prayer-label">المتبقي على الصلاة</div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========== الشريط السفلي ========== -->
+    <div class="bottom glass neon">
+
+        <h3 class="bottom-title">الحصص اليوم</h3>
+
+        <div id="lessons-row" class="lessons-row"></div>
+
+        <div class="buttons">
+            <button id="settings-btn" class="btn blue">⚙️ الإعدادات</button>
+            <button id="manage-btn" class="btn cyan">📚 إدارة الحصص</button>
+        </div>
+
+        <div class="signature">برمجة اللوحة: آمنة مالح العنزي</div>
+    </div>
+
+    <!-- ======================
+        نافذة إدارة الحصص
+    ====================== -->
+    <div id="manage-popup" class="popup">
+        <div class="popup-box glass neon popup-large">
+
+            <h2>إدارة الحصص</h2>
+
+            <!-- بداية اليوم -->
+            <div class="popup-section">
+                <label>وقت بداية الحصة الأولى</label>
+
+                <div class="between-row">
+
+                    <select id="start-hour">
+                        <option value="" disabled selected>الساعة</option>
+                        <script>
+                            for (let i = 1; i <= 12; i++) {
+                                document.write(`<option value="${i}">${i}</option>`);
+                            }
+                        </script>
+                    </select>
+
+                    <select id="start-minute">
+                        <option value="" disabled selected>الدقيقة</option>
+                        <script>
+                            for (let i = 0; i < 60; i++) {
+                                const m = i.toString().padStart(2, "0");
+                                document.write(`<option value="${m}">${m}</option>`);
+                            }
+                        </script>
+                    </select>
+
+                    <select id="start-ampm">
+                        <option value="AM">صباحًا</option>
+                        <option value="PM">مساءً</option>
+                    </select>
+
+                </div>
+            </div>
+
+            <!-- عدد الحصص -->
+            <div class="popup-section">
+                <label>عدد الحصص ومدتها</label>
+
+                <div class="lesson-controls horizontal">
+                    <button id="add-lesson" class="btn gray mini-btn">+</button>
+                    <button id="remove-lesson" class="btn red mini-btn">−</button>
+                </div>
+
+                <div id="lessons-list"></div>
+            </div>
+
+            <!-- الوقت بين الحصص -->
+            <div class="popup-section">
+                <label>الوقت بين الحصص</label>
+                <div class="between-row">
+                    <input id="between-min" type="number" placeholder="دقائق">
+                    <input id="between-sec" type="number" placeholder="ثواني">
+                </div>
+            </div>
+
+            <!-- الفسح -->
+            <div class="popup-section">
+                <label>الفُسح</label>
+                <button id="add-break" class="btn gray mini-btn smaller">+ إضافة فسحة</button>
+                <div id="breaks-list"></div>
+            </div>
+
+            <button id="save-settings" class="btn blue save-btn">حفظ الإعدادات</button>
+            <button class="close btn green close-btn">إغلاق</button>
+
+        </div>
+    </div>
+
+    <!-- ======================
+        نافذة الإعدادات العامة
+    ====================== -->
+    <div id="settings-popup" class="popup">
+        <div class="popup-box glass neon popup-large">
+
+            <h2>الإعدادات العامة</h2>
+
+            <!-- اسم المدرسة -->
+            <div class="popup-section">
+                <label>اسم المدرسة</label>
+                <input id="school-name-input" type="text" placeholder="اكتب اسم المدرسة">
+            </div>
+
+            <!-- نوع المدرسة -->
+            <div class="popup-section">
+                <label>نوع المدرسة</label>
+                <div class="between-row">
+                    <button class="btn gray" id="type-boys">بنين</button>
+                    <button class="btn gray" id="type-girls">بنات</button>
+                </div>
+            </div>
+
+            <!-- مظهر الواجهة -->
+            <div class="popup-section">
+                <label>مظهر الواجهة</label>
+                <select id="theme-select">
+                    <option value="dark">🌙 الوضع الليلي</option>
+                    <option value="light">☀️ الوضع النهاري</option>
+                </select>
+            </div>
+
+            <!-- اختيار المدينة -->
+            <div class="popup-section">
+                <label>مدينة المدرسة</label>
+                <select id="city-select">
+                    <option value="عرعر">عرعر</option>
+                    <option value="الرياض">الرياض</option>
+                    <option value="جدة">جدة</option>
+                    <option value="مكة">مكة</option>
+                    <option value="الدمام">الدمام</option>
+                    <option value="المدينة">المدينة المنورة</option>
+                    <option value="تبوك">تبوك</option>
+                    <option value="الطائف">الطائف</option>
+                    <option value="جازان">جازان</option>
+                    <option value="نجران">نجران</option>
+                </select>
+            </div>
+
+            <!-- مستوى الصوت -->
+            <div class="popup-section">
+                <label>مستوى الصوت</label>
+                <input id="volume-range" type="range" min="0" max="100" value="80">
+            </div>
+
+            <button id="save-settings-general" class="btn blue save-btn">حفظ الإعدادات</button>
+            <button class="close btn green close-btn">إغلاق</button>
+
+        </div>
+    </div>
+
+</body>
+
+</html>
