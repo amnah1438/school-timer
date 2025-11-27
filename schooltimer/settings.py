@@ -121,13 +121,10 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    BASE_DIR / 'static',   # مجلد static الأساسي داخل المشروع
 ]
 
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-# عند التحزيم (collectstatic)
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = BASE_DIR / 'staticfiles'   # مكان تجمع الملفات عند التحزيم
 
 
 # ==========================
