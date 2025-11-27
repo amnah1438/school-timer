@@ -120,10 +120,6 @@ USE_TZ = True
 # ==========================
 STATIC_URL = '/static/'
 
-# مجلد static الرئيسي
-STATICFILES_DIRS = [
- BASE_DIR / 'timetable' / 'static',
-]
 
 # عند التحزيم (collectstatic)
 STATIC_ROOT = BASE_DIR / 'staticfiles'
