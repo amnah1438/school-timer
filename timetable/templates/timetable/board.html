@@ -2,12 +2,13 @@
 <html lang="ar" dir="rtl">
 
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مؤقّت الحصص الدراسية</title>
 
-    <link rel="stylesheet" href="/static/timetable/css/board.css">
-    <script defer src="/static/timetable/js/board.js"></script>
+    <link rel="stylesheet" href="{% static 'timetable/css/board.css' %}">
+    <script defer src="{% static 'timetable/js/board.js' %}"></script>
 </head>
 
 <body id="app-body">
