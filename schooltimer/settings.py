@@ -34,6 +34,10 @@ INSTALLED_APPS = [
 # ==========================
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+
+    # ⭐ أضيفيه هنا
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
     'django.contrib.sessions.middleware.SessionMiddleware',
 
     # دعم التعدد اللغوي
@@ -121,11 +125,13 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',   # مجلد static الأساسي داخل المشروع
+    BASE_DIR / 'static',
 ]
 
-STATIC_ROOT = BASE_DIR / 'staticfiles'   # مكان تجمع الملفات عند التحزيم
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+# ⭐ مهم جداً لعمل Render
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # ==========================
 #     الإعدادات العامة
