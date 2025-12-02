@@ -374,3 +374,73 @@ body.light-mode .upcoming {
     accent-color: #00eaff;
 }
 
+/* ============================================
+   🔧 إصلاح عدم التمدد + منع السكرول نهائياً
+   + ضبط الصفحة لشاشة الآيباد
+============================================ */
+
+/* منع أي سكرول في الصفحة */
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
+
+/* جعل الشبكة كلها تتمدد تلقائياً داخل الشاشة */
+.layout {
+    height: calc(100vh - 120px); /* يضبط الارتفاع وينهي النزول */
+    display: grid;
+    grid-template-columns: 65% 30%;
+    gap: 25px;
+    align-items: center;
+}
+
+/* تكبير الدائرة بنسبة تناسب الآيباد */
+.big-circle {
+    width: 480px;
+    height: 480px;
+}
+
+/* تكبير دوائر الحصص */
+.lesson,
+.break-circle {
+    width: 58px;
+    height: 58px;
+    font-size: 20px;
+}
+
+/* ضبط الشريط السفلي ليكون داخل الشاشة */
+.bottom {
+    margin-top: 0;
+    padding-bottom: 10px;
+}
+
+/* يمنع تمدد المربعات ونزولها خارج الشاشة */
+.left-box,
+.center-box {
+    overflow: hidden;
+}
+
+/* للشاشات الصغيرة — الجوال و الآيباد العمودي */
+@media (max-width: 1024px) {
+    .layout {
+        grid-template-columns: 1fr;
+        height: auto;
+        overflow-y: auto;
+        padding-bottom: 40px;
+    }
+
+    body {
+        overflow-y: auto; /* يسمح بالجوال فقط */
+    }
+
+    .big-circle {
+        width: 380px;
+        height: 380px;
+    }
+
+    .lesson, .break-circle {
+        width: 50px;
+        height: 50px;
+        font-size: 18px;
+    }
+}
